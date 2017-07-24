@@ -1,26 +1,15 @@
 'use strict'
-const request = require('request');
-const key = require('./env');
 
-	request(apiUrl, function (error, response, body) {
-		let bodyObject = JSON.parse(body);
-		console.log(bodyObject);
-		bodyObject.items.forEach(function(element) {
-			if (element.displayLink === 'www.imdb.com')
-				console.log(element.title);
-		});	
+var request = require('request');
+var movieTitle = require('./app');
+var apiId = require('./id');
+var apiKey = require('./env');
+var get = function(movieTitle){
+	var apiUrl = 'https://www.googleapis.com/customsearch/v1?key='+apiKey+'&cx='+apiId+'&q=' + movieTitle;
+	request(apiUrl, function(error, response, body){
+		var parseThings = JSON.parse(body);
+		console.log(parseThings.items[0].snippet);
 	});
-}
-
-function get(movieTitle) {
-	var apiUrl = 'https://www.googleapis.com/customsearch/v1?key=' + key + '&q=';
-	var queryArray = movieTitle.split(" ");
-	let querryString = "";
-	queryArray.forEach(function(element, index) {
-		querryString += element;
-		if (index < queryArray.length - 1)
-			querryString += '+';
-	});
-}
+};
 
 module.exports = get;
